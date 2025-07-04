@@ -70,6 +70,7 @@ veces_simular = 1000  # Cantidad de veces a repetir la simulación.
 ###################
 ###  EJECUCIÓN  ###
 ###################
+print(f"Probabilidad definida: {p}")
 
 ### Estrategia MAXIMIZAR ###
 jugador_1 = Jugador()
@@ -85,7 +86,7 @@ for i in range(veces_simular) : # Bucle for que repite n veces la simulación.
 
   jugador_1.saldo = jugador_1.saldo_inicial  # Reinicia el saldo actual del jugador al valor inicial, con el fin de repetir la simulación nuevamente.
 
-print(f"Probabilidad de ganar (Estrategia MAX): {juegos_1/veces_simular}")
+print(f"Probabilidad de alcazar objetivo (Estrategia MAX): {juegos_1/veces_simular}")
 
 
 ### Estrategia MINIMIZAR ###
@@ -102,4 +103,4 @@ for i in range(veces_simular) :
 
   jugador_2.saldo = jugador_2.saldo_inicial  # Reinicia el saldo actual del jugador al valor inicial, con el fin de repetir la simulación nuevamente.
 
-print(f"Probabilidad de ganar (Estrategia MIN): {juegos_2/veces_simular}")
+print(f"Probabilidad de alcanzar objetivo (Estrategia MIN): {juegos_2/veces_simular}")
