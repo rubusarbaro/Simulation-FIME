@@ -10,6 +10,7 @@ class Jugador :
     saldo_inicial (float): Saldo con el que el Jugador comienza la primera apuesta. Por defecto es 100.00.
   """
   def __init__(self, saldo_inicial=100.00) :
+    self.saldo_inicial = saldo_inicial
     self.saldo = saldo_inicial  # Saldo inicial del Jugador. Por defecto es 100.00, como en el ejercicio.
 
   def apostar_estrategia_maximizar(self, probabilidad: float) :
@@ -62,42 +63,43 @@ class Jugador :
 ###  PARÁMETROS  ###
 ####################
 
-p = 0.8
-objetivo = 1000.00
-
+p = 0.8 # Probabilidad P.
+objetivo = 1000.00  # Cantidad objetivo que el jugador necesita para mañana en la mañana.
+veces_simular = 1000  # Cantidad de veces a repetir la simulación.
 
 ###################
 ###  EJECUCIÓN  ###
 ###################
 
 ### Estrategia MAXIMIZAR ###
-jugador_1 = Jugador() # Juega estrategia de maximizar
-juegos_1 = 0
+jugador_1 = Jugador()
+juegos_1 = 0  # Contador de los juegos en la simulación donde se alcanza la cantidad objetivo.
 
-for i in range(1000) :
+for i in range(veces_simular) : # Bucle for que repite n veces la simulación.
 
-  while jugador_1.apostar_estrategia_maximizar(p) and jugador_1.saldo < objetivo :
-    pass
+  while jugador_1.apostar_estrategia_maximizar(p) and jugador_1.saldo < objetivo :  # Repite la estrategia MAXIMIZAR hasta que el jugador alcanza su objetivo o hasta que el jugador se queda sin saldo.
+    pass  # El argumento pass está funcionando como un comodín.
 
-  if jugador_1.saldo >= objetivo :
+  if jugador_1.saldo >= objetivo :  # Si el saldo del jugador alcanzó el objetivo, suma 1 al contador de juegos exitosos.
     juegos_1 += 1
 
-  jugador_1.saldo = 100.00
+  jugador_1.saldo = jugador_1.saldo_inicial  # Reinicia el saldo actual del jugador al valor inicial, con el fin de repetir la simulación nuevamente.
 
-print(f"Probabilidad de ganar: {juegos_1/1000}")
+print(f"Probabilidad de ganar (Estrategia MAX): {juegos_1/veces_simular}")
+
 
 ### Estrategia MINIMIZAR ###
-jugador_2 = Jugador() # Juega estrategia de minimizar
-juegos_2 = 0
+jugador_2 = Jugador()
+juegos_2 = 0  # Contador de los juegos en la simulación donde se alcanza la cantidad objetivo.
 
-for i in range(1000) :
+for i in range(veces_simular) :
 
-  while jugador_2.apostar_estrategia_minimizar(p) and jugador_2.saldo < objetivo :
-    pass
+  while jugador_2.apostar_estrategia_minimizar(p) and jugador_2.saldo < objetivo :  # Repite la estrategia MINIMIZAR hasta que el jugador alcanza su objetivo o hasta que el jugador se queda sin saldo.
+    pass  # El argumento pass está funcionando como un comodín.
 
-  if jugador_2.saldo >= objetivo :
+  if jugador_2.saldo >= objetivo :  # Si el saldo del jugador alcanzó el objetivo, suma 1 al contador de juegos exitosos.
     juegos_2 += 1
 
-  jugador_2.saldo = 100.00
+  jugador_2.saldo = jugador_2.saldo_inicial  # Reinicia el saldo actual del jugador al valor inicial, con el fin de repetir la simulación nuevamente.
 
-print(f"Probabilidad de ganar: {juegos_2/1000}")
+print(f"Probabilidad de ganar (Estrategia MIN): {juegos_2/veces_simular}")
