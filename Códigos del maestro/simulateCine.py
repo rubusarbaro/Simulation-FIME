@@ -35,18 +35,24 @@ def go_to_movies(env, moviegoer, theater):
     # Moviegoer arrives at the theater
     arrival_time = env.now
 
-    with theater.cashier.request() as request:
-        yield request
-        yield env.process(theater.purchase_ticket(moviegoer))
-
-    with theater.usher.request() as request:
-        yield request
-        yield env.process(theater.check_ticket(moviegoer))
-
-    if random.choice([True, False]):
+    if random.random() < 0.1 :  # Probabilidad del 10% de que un cliente solo vaya a dulcería.
         with theater.server.request() as request:
             yield request
             yield env.process(theater.sell_food(moviegoer))
+
+    else:
+        with theater.cashier.request() as request:
+            yield request
+            yield env.process(theater.purchase_ticket(moviegoer))
+
+        if random.choice([True, False]):
+            with theater.server.request() as request:
+                yield request
+                yield env.process(theater.sell_food(moviegoer))
+
+        with theater.usher.request() as request:
+            yield request
+            yield env.process(theater.check_ticket(moviegoer))
 
     # Moviegoer heads into the theater
     wait_times.append(env.now - arrival_time)
