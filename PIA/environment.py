@@ -28,12 +28,14 @@ class Environment :
             else :
                 arrival_times.append(arrival_times[i-1]+round(arrival_time,1))
 
-        self.screen.print_screen()
-
-        print(arrival_times[0])
-
         Label("Tiempo:",Label.regular).set_in_screen(self.screen,0,30)
         time_label = Label(str(round(self.clock,2)),Label.regular)
+
+        Label("Siguiente llegada:",Label.regular).set_in_screen(self.screen,0,31)
+        arrival_label = Label(str(arrival_times[self.customer_count]),Label.regular)
+        arrival_label.set_in_screen(self.screen,11,31)
+
+        self.screen.print_screen()
 
         while True :
             print_screen = True
@@ -55,6 +57,9 @@ class Environment :
                 customer.spawn(0,28)
                 print_screen = True
                 self.customer_count += 1
+                arrival_label.text = str(arrival_times[self.customer_count])
+                arrival_label.set_in_screen(self.screen,11,31)
+                
 
             if len(self.customers) == 0 :
                 pass
@@ -76,7 +81,7 @@ class Environment :
                             del customer
 
             time_label.text = str(round(self.clock,2))
-            time_label.set_in_screen(self.screen,5,30)
+            time_label.set_in_screen(self.screen,4,30)
 
             if print_screen :
                 self.screen.print_screen()
