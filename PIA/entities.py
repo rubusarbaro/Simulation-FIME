@@ -1,3 +1,4 @@
+import emoji
 import functions
 
 class Entity():
