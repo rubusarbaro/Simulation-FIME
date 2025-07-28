@@ -123,7 +123,7 @@ class Screen :
         return layout
 
     def print_screen(self) :
-
+        import emoji
         """
         Print the layout in the "screen" class object.
         """
