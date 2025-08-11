@@ -10,9 +10,9 @@ import random
 import statistics
 import numpy
 import simpy
+from math import inf as infinite
 
 wait_times = []
-
 
 class Theater(object):
     def __init__(self, env, num_cashiers, num_servers, num_ushers):
@@ -78,7 +78,6 @@ def get_average_wait_time(wait_times):
     seconds = frac_minutes * 60
     return round(minutes), round(seconds)
 
-
 def get_user_input():
     num_cashiers = input("Input # of cashiers working: ")
     num_servers = input("Input # of servers working: ")
@@ -98,23 +97,51 @@ def get_user_input():
 
 def main():
     # Setup
-    random.seed()
-    num_cashiers, num_servers, num_ushers = get_user_input()
+    random.seed(42)
 
-    # Run the simulation
-    env = simpy.Environment()
-    env.process(run_theater(env, num_cashiers, num_servers, num_ushers))
-    print(
-        "Running simulation...",
-    )
-    env.run(until=90)
+    scenarios = []
+    for i in range(1, 10):
+        for j in range(1, 10):
+            for k in range(1, 10):
+                scenarios.append({
+                    "cashiers": i,
+                    "servers": j,
+                    "ushers": k,
+                    "average_time": None
+                })
 
-    # View the results
-    mins, secs = get_average_wait_time(wait_times)
-    print(
-        f"\nThe average wait time is {mins} minutes and {secs} seconds.",
-    )
+    for set in scenarios:
+        num_cashiers = set["cashiers"]
+        num_servers = set["servers"]
+        num_ushers = set["ushers"]
+
+        times = []
+        for l in range(10):
+            # Run the simulation
+            env = simpy.Environment()
+            env.process(run_theater(env, num_cashiers, num_servers, num_ushers))
+            #print(
+            #    "Running simulation...",
+            #)
+            env.run(until=240)
+            times.append(statistics.mean(wait_times))
+            wait_times.clear()
+        
+        set["average_time"] =  statistics.mean(times)
+
+    scenarios.reverse()
+
+    resources_counter = 27
+    time_counter = infinite
+    target_scenario = None
+    for new_set in scenarios:
+        if new_set["cashiers"] + new_set["servers"] + new_set["ushers"] < resources_counter and new_set["average_time"] < time_counter:
+            resources_counter = new_set["cashiers"] + new_set["servers"] + new_set["ushers"]
+            time_counter = new_set["average_time"]
+            target_scenario = new_set
+    
+    print(f"Escenario óptimo es: {target_scenario}")
 
 
 if __name__ == "__main__":
-    main()
+        main()
