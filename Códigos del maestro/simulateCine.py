@@ -99,49 +99,69 @@ def main():
     # Setup
     random.seed(42)
 
-    scenarios = []
-    for i in range(1, 10):
-        for j in range(1, 10):
-            for k in range(1, 10):
-                scenarios.append({
-                    "cashiers": i,
-                    "servers": j,
-                    "ushers": k,
-                    "average_time": None
-                })
+    a = 4
+    b = 4
+    c = 1
 
-    for set in scenarios:
-        num_cashiers = set["cashiers"]
-        num_servers = set["servers"]
-        num_ushers = set["ushers"]
+    time_counter_2 = 0
+    first = True
 
-        times = []
-        for l in range(10):
-            # Run the simulation
-            env = simpy.Environment()
-            env.process(run_theater(env, num_cashiers, num_servers, num_ushers))
-            #print(
-            #    "Running simulation...",
-            #)
-            env.run(until=240)
-            times.append(statistics.mean(wait_times))
-            wait_times.clear()
-        
-        set["average_time"] =  statistics.mean(times)
+    end = True
+    while end:
+        #print(f"Cashiers: {a-1}")
 
-    scenarios.reverse()
+        scenarios = []
+        for i in range(a, a + 1):
+            for j in range(b, b + 1):
+                for k in range(c, c + 1):
+                    scenarios.append({
+                        "cashiers": i,
+                        "servers": j,
+                        "ushers": k,
+                        "average_time": None
+                    })
 
-    resources_counter = 27
-    time_counter = infinite
-    target_scenario = None
-    for new_set in scenarios:
-        if new_set["cashiers"] + new_set["servers"] + new_set["ushers"] < resources_counter and new_set["average_time"] < time_counter:
-            resources_counter = new_set["cashiers"] + new_set["servers"] + new_set["ushers"]
-            time_counter = new_set["average_time"]
-            target_scenario = new_set
+        for set in scenarios:
+            num_cashiers = set["cashiers"]
+            num_servers = set["servers"]
+            num_ushers = set["ushers"]
+
+            times = []
+            for l in range(100):
+                # Run the simulation
+                env = simpy.Environment()
+                env.process(run_theater(env, num_cashiers, num_servers, num_ushers))
+                #print(
+                #    "Running simulation...",
+                #)
+                env.run(until=240)
+                times.append(statistics.mean(wait_times))
+                wait_times.clear()
+            
+            #set["average_time"] =  statistics.mean(times)
+            print(statistics.mean(times))
+
+        #scenarios.reverse()
+
+        resources_counter = 27
+        time_counter = infinite
+        target_scenario = None
+        #for new_set in scenarios:
+        #    if new_set["cashiers"] + new_set["servers"] + new_set["ushers"] < resources_counter and new_set["average_time"] < time_counter:
+        #        resources_counter = new_set["cashiers"] + new_set["servers"] + new_set["ushers"]
+        #        time_counter = new_set["average_time"]
+        #        target_scenario = new_set
     
-    print(f"Escenario óptimo es: {target_scenario}")
-
+        #print(f"Escenario óptimo es: {target_scenario}")
+    
+        #if first:
+        #    time_counter_2 = time_counter
+        #    first = False
+        #if time_counter < 5:
+        #    time_counter_2 = time_counter
+        #    a -= 1
+        #if a == 2:
+        #    end = False
 
 if __name__ == "__main__":
         main()
